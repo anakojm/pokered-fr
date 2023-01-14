@@ -19,10 +19,10 @@ DisplayPokemonCenterDialogue_::
 	ld hl, NeedYourPokemonText
 	call PrintText
 	ld a, $18
-	ld [wSprite01StateData1ImageIndex], a ; make the nurse turn to face the machine
+	; ld [wSprite01StateData1ImageIndex], a ; make the nurse turn to face the machine
 	call Delay3
 	predef HealParty
-	farcall AnimateHealingMachine ; do the healing machine animation
+	; farcall AnimateHealingMachine ; do the healing machine animation
 	xor a
 	ld [wAudioFadeOutControl], a
 	ld a, [wAudioSavedROMBank]
