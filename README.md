@@ -1,4 +1,4 @@
-# Pokémon: Version Rouge and Bleue for numwor [![Build Status][ci-badge]][ci]
+# Pokémon: Version Rouge and Bleue for numwork [![Build Status][ci-badge]][ci]
 
 
 This is a disassembly of Pokémon: Version Rouge and Bleue that is partially working on numwork omega gameboy emulator.
@@ -19,9 +19,9 @@ The two line to comment should have those comments:
 
 It builds the following ROMs:
 
-* Pokemon - Version Rouge (F) [S].gb  `sha1: 47a7622fa30e6402a3891fe65b3a930bf9bd7aec`
-* Pokemon - Version Bleue (F) [S].gb  `sha1: 47faa910d0e073c600665bf9c83b6bd17babdf8a`
-* pokeblue_debug.gbc (debug build) `sha1: a46b07c821b0df992237071490d681cdd61e8d1a`
+* pokered.gbc  `sha1: 21370ea178a29ed106f063d2f8a3f0a41cde4dba`
+* pokeblue.gbc  `sha1: bc063e445e87f248a4f0c6e1118603548fff4ff4`
+* pokeblue_debug.gbc (debug build) `sha1: 82c60508d74b13cdcc3432a0f06c274525f72091`
 
 If you don't want to bother compiling, you can download a rom from the releases.
 
@@ -63,3 +63,4 @@ Other disassembly projects:
 [irc]: https://web.libera.chat/?#pret
 [ci]: https://github.com/einstein95/pokered-fr/actions
 [ci-badge]: https://github.com/einstein95/pokered-fr/actions/workflows/main.yml/badge.svg
+[discord-omega]: https://discord.gg/X2TWhh9
