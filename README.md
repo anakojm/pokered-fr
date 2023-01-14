@@ -10,10 +10,10 @@ The fix is to remove the frames of the nurse spinning in front of the machine an
 
 This fix does not solve everything, if you die or if you fly the game will crash.
 
-**NOTE**: If you to patch yourself, you can git clone then edit `engine/events/pokecenter.asm` 
-and you comment line 25 and 22 with a semicolon (the line that animate the nurse and the healing machine)
+**NOTE**: If you want to patch yourself, you can clone the repo, then edit `engine/events/pokecenter.asm` 
+and comment line 22 and 25 with a semicolon (the line that animate the nurse and the healing machine).
 
-This fix work for [the english version][pokered], other languages should work too.
+This also fix work for [the english version][pokered], other languages should work too.
 
 It builds the following ROMs:
 
