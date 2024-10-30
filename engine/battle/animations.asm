@@ -114,13 +114,13 @@ DrawFrameBlock:
 	ld [de], a ; store tile ID
 	inc de
 	ld a, [hli]
-	bit 5, a ; is horizontal flip enabled?
+	bit OAM_X_FLIP, a
 	jr nz, .disableHorizontalFlip
 .enableHorizontalFlip
-	set 5, a
+	set OAM_X_FLIP, a
 	jr .storeFlags2
 .disableHorizontalFlip
-	res 5, a
+	res OAM_X_FLIP, a
 .storeFlags2
 	ld [de], a
 	inc de
@@ -431,7 +431,7 @@ MoveAnimation:
 	call WaitForSoundToFinish
 	xor a
 	ld [wSubAnimSubEntryAddr], a
-	ld [wUnusedD09B], a
+	ld [wUnusedMoveAnimByte], a
 	ld [wSubAnimTransform], a
 	dec a ; NO_MOVE - 1
 	ld [wAnimSoundID], a
@@ -676,7 +676,7 @@ DoSpecialEffectByAnimationId:
 INCLUDE "data/battle_anims/special_effects.asm"
 
 DoBallTossSpecialEffects:
-	ld a, [wcf91]
+	ld a, [wCurItem]
 	cp ULTRA_BALL + 1 ; is it a Master Ball or Ultra Ball?
 	jr nc, .skipFlashingEffect
 .flashingEffect ; do a flashing effect if it's Master Ball or Ultra Ball
@@ -694,7 +694,7 @@ DoBallTossSpecialEffects:
 	ld a, [wIsInBattle]
 	cp 2 ; is it a trainer battle?
 	jr z, .isTrainerBattle
-	ld a, [wd11e]
+	ld a, [wPokeBallAnimData]
 	cp $10 ; is the enemy pokemon the Ghost Marowak?
 	ret nz
 ; if the enemy pokemon is the Ghost Marowak, make it dodge during the last 3 frames
@@ -969,7 +969,7 @@ AnimationFlashScreenLong:
 	push hl
 .innerLoop
 	ld a, [hli]
-	cp $01 ; is it the end of the palettes?
+	cp 1
 	jr z, .endOfPalettes
 	ldh [rBGP], a
 	call FlashScreenLongDelay
@@ -985,35 +985,35 @@ AnimationFlashScreenLong:
 
 ; BG palettes
 FlashScreenLongMonochrome:
-	db %11111001 ; 3, 3, 2, 1
-	db %11111110 ; 3, 3, 3, 2
-	db %11111111 ; 3, 3, 3, 3
-	db %11111110 ; 3, 3, 3, 2
-	db %11111001 ; 3, 3, 2, 1
-	db %11100100 ; 3, 2, 1, 0
-	db %10010000 ; 2, 1, 0, 0
-	db %01000000 ; 1, 0, 0, 0
-	db %00000000 ; 0, 0, 0, 0
-	db %01000000 ; 1, 0, 0, 0
-	db %10010000 ; 2, 1, 0, 0
-	db %11100100 ; 3, 2, 1, 0
-	db $01 ; terminator
+	dc 3, 3, 2, 1
+	dc 3, 3, 3, 2
+	dc 3, 3, 3, 3
+	dc 3, 3, 3, 2
+	dc 3, 3, 2, 1
+	dc 3, 2, 1, 0
+	dc 2, 1, 0, 0
+	dc 1, 0, 0, 0
+	dc 0, 0, 0, 0
+	dc 1, 0, 0, 0
+	dc 2, 1, 0, 0
+	dc 3, 2, 1, 0
+	db 1 ; end
 
 ; BG palettes
 FlashScreenLongSGB:
-	db %11111000 ; 3, 3, 2, 0
-	db %11111100 ; 3, 3, 3, 0
-	db %11111111 ; 3, 3, 3, 3
-	db %11111100 ; 3, 3, 3, 0
-	db %11111000 ; 3, 3, 2, 0
-	db %11100100 ; 3, 2, 1, 0
-	db %10010000 ; 2, 1, 0, 0
-	db %01000000 ; 1, 0, 0, 0
-	db %00000000 ; 0, 0, 0, 0
-	db %01000000 ; 1, 0, 0, 0
-	db %10010000 ; 2, 1, 0, 0
-	db %11100100 ; 3, 2, 1, 0
-	db $01 ; terminator
+	dc 3, 3, 2, 0
+	dc 3, 3, 3, 0
+	dc 3, 3, 3, 3
+	dc 3, 3, 3, 0
+	dc 3, 3, 2, 0
+	dc 3, 2, 1, 0
+	dc 2, 1, 0, 0
+	dc 1, 0, 0, 0
+	dc 0, 0, 0, 0
+	dc 1, 0, 0, 0
+	dc 2, 1, 0, 0
+	dc 3, 2, 1, 0
+	db 1 ; end
 
 ; causes a delay of 2 frames for the first cycle
 ; causes a delay of 1 frame for the second and third cycles
@@ -1118,12 +1118,12 @@ AnimationWaterDropletsEverywhere:
 	ld a, 16
 	ld [wBaseCoordY], a
 	ld a, 0
-	ld [wUnusedD08A], a
+	ld [wUnusedWaterDropletsByte], a
 	call _AnimationWaterDroplets
 	ld a, 24
 	ld [wBaseCoordY], a
 	ld a, 32
-	ld [wUnusedD08A], a
+	ld [wUnusedWaterDropletsByte], a
 	call _AnimationWaterDroplets
 	dec d
 	jr nz, .loop
@@ -2024,8 +2024,8 @@ ChangeMonPic:
 	and a
 	jr z, .playerTurn
 	ld a, [wChangeMonPicEnemyTurnSpecies]
-	ld [wcf91], a
-	ld [wd0b5], a
+	ld [wCurPartySpecies], a
+	ld [wCurSpecies], a
 	xor a
 	ld [wSpriteFlipped], a
 	call GetMonHeader
@@ -2037,7 +2037,7 @@ ChangeMonPic:
 	push af
 	ld a, [wChangeMonPicPlayerTurnSpecies]
 	ld [wBattleMonSpecies2], a
-	ld [wd0b5], a
+	ld [wCurSpecies], a
 	call GetMonHeader
 	predef LoadMonBackPic
 	xor a ; TILEMAP_MON_PIC
@@ -2592,7 +2592,7 @@ TossBallAnimation:
 
 	ld hl, .PokeBallAnimations
 	; choose which toss animation to use
-	ld a, [wcf91]
+	ld a, [wCurItem]
 	cp POKE_BALL
 	ld b, TOSS_ANIM
 	jr z, .done
